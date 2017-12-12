@@ -20,18 +20,40 @@ gitDF = jsonlite::fromJSON(jsonlite::toJSON(json1))
 gitDF[gitDF$full_name == "flynnn5/datasharing", "created_at"]
 
 jsondata = fromJSON("https://api.github.com/users/flynnn5/followers")
+jsondata
 class(jsondata)
 names(jsondata)
 myFollowers = c(jsondata$login)
 myFollowers
-
+#getting information on my followers, and their number of followers
 followersINT = length(myFollowers)
 followersINT
-followersUrls =1:8
+followersFollowersUrl = 1:followersINT
+repoUrls = 1:followersINT
+followersUrls =1:followersINT
 for (i in 1:followersINT) {
   url = "https://api.github.com/users/"
   followersUrls[i] = paste(url,myFollowers[i], sep="")
-  i=i+1
+  repoUrls[i]=paste(followersUrls[i], "/repos", sep="")
+  
 }
 followersUrls
+repoUrls
+
+
+skUrl = followersUrls[1]
+skUrl
+skJson = fromJSON(skUrl)
+skJson$repos #gets urls for repos
+skRepo = fromJSON(paste0(skUrl, "/repos", sep=""))
+SkRepos = length(skRepo$commits_url)
+SkRepos
+skRepo$name
+skReposNames= 1:5
+for (i in 1:5){
+  skReposNames[i] = paste(skUrl, "/repos/", skRepo$name[i], sep="")
+}
+skReposNames
+repp =fromJSON("https://api.github.com/repos/skeher/LCA/commits")
+repp$commit$author$date
 
