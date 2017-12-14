@@ -40,11 +40,11 @@ library(httr)
   getFollowers = function(user){
     usersFOllowersDetails = GET(paste("https://api.github.com/users/", user, "/followers?per_page=100", sep=""), gtoken)
     usersFollowersDeets =content(usersFOllowersDetails)
-    usersFollowers = c()
+    usersFollowers = data.frame()
     for(i in 1:length(usersFollowersDeets))
     {
       currentFollower <- data.frame(user = usersFollowersDeets[[i]]$login)
-      usersFollowers= append(usersFollowers,values = currentFollower, after=length(usersFollowers))
+      usersFollowers = rbind(usersFollowers, currentFollower)
     }
     return(usersFollowers)
   }
@@ -113,19 +113,17 @@ library(httr)
     noRepos= length(repos)
     return(noRepos)
   }
-  gitusers = c("nikumu", "srcmaxim", "adamralph", "nomadbot", "TunedMystic", "erolaliyev", "Hasib36", "nichanank", "lennyroyroy", "rftHusn", "regisfoucault", "cyberdrk", "andreccosta", "JusethAg", "saldanac", "zhanbei", "GabrielDS", "mehedi432", "Ryanmtate", "nemobgs", "serafeimgr", "yoginth", "sfdye", "amazingandyyy", "Vermisse", "evanswanjau", "jenshinshao", "NaSabbir", "fdb", "franniez", "jryans", "serialization", "RaphaelKomander","fabpot", "andrew", "taylorotwell", "egoist", "HugoGiraudel", "ornicar", "bebraw", "nelsonic", "alexcrichton", "jonathanong", "mikermcneil", "benbalter", "jxnblk", "yegor256", "orta", "rstacruz" , "GrahamCampbell", "afc163", "kamranahmedse", "joshaber", "bkeepers", "kennethreitz", "kytrinyx", "STRML", "atmos", "weierophinney"
-               , "agentzh", "steipete", "ai","mikepenz", "nvie", "hadley", "appleboy", "Rich-Harris", "drnic", "rafaelfranca", "ocramius", "mitchellh", "stof", "IgorMinar", "phodal", "jwiegley", "geerlingguy", "dcramer", "sebastianbergmann", "brunocvcunha", "ljharb", "jdalton", "sevilayha", "paulmillr",
-               "tmm1","flynnn5", "skeher", "kehers", "aoifetiernan", "noonandavid", "sorchaobyrne", "conorwallace", "fionawolfe", "oboyle-mikey", "dowlind1", "connold9", "c9s", "zcbenz", "holman", "kevinsawicki", "yihui", "buckyroberts", "kbrsh", "dmalan", "mhevery", "mgechev", "kylef", "chjj", "ayende", "mcollina", "mdo", "yoshuawuyts", "muan","kentcdodds", "jskeet", "mitsuhiko", "steveklabnik", "hzoo", "caged", "dlew", "technoweenie")
-
-  length(gitusers)
+  
+  andrewsFollowers = getFollowers("andrew")
+  andrewsFollowers$user
+  length(andrewsFollowers$user)
   ID = c()
   Followers = c()
   Following=  c()
   Location = c()
   NumberOfRepos = c()
-  getBasicData("flynnn5")
-  for(i in 1:length(gitusers)) {
-    userData= getBasicData(gitusers[i])
+  for(i in 1:length(andrewsFollowers$user)) {
+    userData= getBasicData(andrewsFollowers$user[i])
     ID= append(ID,values = userData[2], after=length(ID))
     Followers= append(Followers,values = userData[3], after=length(Followers))
     Following= append(Following,values = userData[4], after=length(Following))
@@ -133,7 +131,14 @@ library(httr)
     noRepo = getNoRepo(gitusers[i])
     NumberOfRepos = append(NumberOfRepos, values = noRepo, after = length(NumberOfRepos))
   }
+  folName = c()
 
-fd= cbind(ID,Followers,Following,Location,NumberOfRepos)
+fd= cbind(andrewsFollowers,ID,Followers,Following,Location,NumberOfRepos)
 fd
 write.csv(fd, "MyData.csv")
+
+
+dateUsers = c("flynnn5", "fionawolfe", "aoifetiernan", "skeher", "sorchaobyrne", "conorwallace")
+
+
+getFollowers("andrew")[1]
